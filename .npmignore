@@ -1,0 +1,20 @@
+# Symlinks para projetos externos
+n8n-docs
+n8n-nodes-github-example
+nfe-client-nodejs
+
+# Arquivos de desenvolvimento
+.agents/
+.github/
+.vscode/
+openspec/
+node_modules/
+
+# Arquivos de configuração dev
+*.md
+.gitignore
+.prettierrc.js
+eslint.config.mjs
+skills-lock.json
+docker-compose.yml
+tsconfig.json

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "skills": {
+    "continual-learning": {
+      "source": "microsoft/skills",
+      "sourceType": "github",
+      "computedHash": "1f7c1a79d6ee166aac48591acbc9165778d2384fa9e84405099750b6e065c0c7"
+    },
+    "frontend-design-review": {
+      "source": "microsoft/skills",
+      "sourceType": "github",
+      "computedHash": "bdfcadec9604ec0225f337ffbcecb8c8a5ddf69b6b1a1335963df97a0665472e"
+    },
+    "wiki-architect": {
+      "source": "microsoft/skills",
+      "sourceType": "github",
+      "computedHash": "0c03f037b5d40770a0e5744a63c372693b999b7a3d269ea9c4d2bf60add27f95"
+    },
+    "wiki-changelog": {
+      "source": "microsoft/skills",
+      "sourceType": "github",
+      "computedHash": "81728cf37de3df99529a0c3afd71d84d2ebaf0259fc13770cbdc05e2ef9ffa4f"
+    },
+    "wiki-qa": {
+      "source": "microsoft/skills",
+      "sourceType": "github",
+      "computedHash": "1b9ebef1410fb9311dfdbd7fa4cee66042a8340d4b66436b2c8f4fd23cc92838"
+    }
+  }
+}

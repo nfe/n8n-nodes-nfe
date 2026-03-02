@@ -1,0 +1,11 @@
+
+.env
+.agents
+openspec
+node_modules
+node_modules/
+dist
+build
+nfe-client-nodejs
+n8n-nodes-github-example
+n8n-docs
