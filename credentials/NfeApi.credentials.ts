@@ -13,7 +13,7 @@ export class NfeApi implements ICredentialType {
 	icon = { light: 'file:nfe.svg', dark: 'file:nfe.svg' } as const;
 
 	// Link to your community node's README
-	documentationUrl = 'https://github.com/org/-nfe?tab=readme-ov-file#credentials';
+	documentationUrl = 'https://github.com/nfe/n8n-nodes-nfe?tab=readme-ov-file#credentials';
 
 	properties: INodeProperties[] = [
 		{
