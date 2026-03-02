@@ -11,3 +11,4 @@ n8n-nodes-github-example
 n8n-docs
 .github/agents/n8n-nfe-generator.agent.md
 docker-compose.yml
+.vscode/mcp.json
