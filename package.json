@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "n8n community nodes for NFe.io - Brazilian electronic invoice API",
   "license": "MIT",
-  "homepage": "https://github.com/nfeio/n8n-nodes-nfe",
+  "homepage": "https://github.com/nfe/n8n-nodes-nfe",
   "keywords": [
     "n8n-community-node-package",
     "n8n",
@@ -27,7 +27,7 @@
   "author": { "name": "Andre Kutianski", "email": "andre@nfe.io" },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nfeio/n8n-nodes-nfe.git"
+    "url": "https://github.com/nfe/n8n-nodes-nfe.git"
   },
   "scripts": {
     "build": "n8n-node build",
