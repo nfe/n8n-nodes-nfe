@@ -22,6 +22,13 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
+      - name: Check package.json version
+        id: package-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Package version: $VERSION"
+
       - name: Install dependencies
         run: npm ci
 
@@ -30,6 +37,11 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Publish to NPM (dry-run)
+        run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}        
 
       - name: Publish
         run: npm publish --ignore-scripts --provenance --access public
