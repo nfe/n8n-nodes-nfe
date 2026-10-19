@@ -1,0 +1,95 @@
+{
+  "name": "NFE.io: send the PDF to Telegram when an NFS-e is issued",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Send the PDF of every issued NFS-e to Telegram\n\n1. Create an **NFE.io API** credential named `NFE.io account` and a **Telegram** credential (bot token).\n2. Set your chat ID in **Send PDF to Telegram**.\n3. Optional: pick your company in **NFE.io Trigger** to ignore events of other companies of the account.\n4. n8n must be reachable over public HTTPS: NFE.io calls the webhook URL when it registers it.\n\nWhile active, the trigger keeps one webhook in your NFE.io account and removes it when the workflow is deactivated. Each test listen also creates one and removes it after the first event. NFE.io can take up to two minutes to start sending events to a new webhook: wait a bit after publishing before you issue a test invoice.\n\nNFE.io can deliver the same event again: use `deliveryId` to skip repeats.",
+        "height": 460,
+        "width": 440
+      },
+      "id": "e25929f9-b38e-4ba9-8420-217611d38383",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-120, -460]
+    },
+    {
+      "parameters": {
+        "events": ["service_invoice.issued_successfully"],
+        "companyId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "id": "cabbc74e-383e-481f-8862-6df0502204cf",
+      "name": "NFE.io Trigger",
+      "type": "n8n-nodes-nfe.nfeTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "webhookId": "7d8d05d0-cd4f-4d9c-aae8-9966ec2fc697",
+      "credentials": {
+        "nfeApi": {
+          "name": "NFE.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "serviceInvoice",
+        "operation": "downloadPdf",
+        "companyId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.companyId }}"
+        },
+        "invoiceId": "={{ $json.payload.id }}",
+        "binaryPropertyName": "data"
+      },
+      "id": "e7c3115e-f8bf-480c-941c-a56b4f06136d",
+      "name": "Download PDF",
+      "type": "n8n-nodes-nfe.nfe",
+      "typeVersion": 2,
+      "position": [240, 0],
+      "credentials": {
+        "nfeApi": {
+          "name": "NFE.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendDocument",
+        "chatId": "your-telegram-chat-id",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {
+          "caption": "=NFS-e {{ $('NFE.io Trigger').item.json.payload.number }} issued for {{ $('NFE.io Trigger').item.json.payload.borrower.name }}, R$ {{ $('NFE.io Trigger').item.json.payload.servicesAmount }}"
+        }
+      },
+      "id": "16e1fed4-18d7-4577-b706-8c5a3e1253a0",
+      "name": "Send PDF to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [480, 0],
+      "credentials": {
+        "telegramApi": {
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "NFE.io Trigger": {
+      "main": [[{ "node": "Download PDF", "type": "main", "index": 0 }]]
+    },
+    "Download PDF": {
+      "main": [[{ "node": "Send PDF to Telegram", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

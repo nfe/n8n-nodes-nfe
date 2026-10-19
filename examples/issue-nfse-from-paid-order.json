@@ -1,0 +1,200 @@
+{
+  "name": "NFE.io: issue an NFS-e for a paid order and email the PDF",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Issue an NFS-e for a paid order\n\n1. Create an **NFE.io API** credential named `NFE.io account` and a **Gmail** credential.\n2. Edit **Paid Order (sample)**: your NFE.io company ID, the service codes of your company and the customer.\n3. Replace **When clicking 'Execute workflow'** and **Paid Order (sample)** with your shop or payment trigger.\n\nEvery run issues a real invoice. Use a test company first.\n\nThe External ID is `order-<order id>`: running the same order again returns the invoice that already exists.",
+        "height": 340,
+        "width": 420
+      },
+      "id": "49e3b2fe-b90d-4983-ae84-36a4ff410281",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-100, -420]
+    },
+    {
+      "parameters": {
+        "content": "### Not authorized in time\n\nThe city did not answer within the timeout. The item carries `waitTimedOut: true` and the invoice ID. Check it later with **Get** or start a workflow from the **NFE.io Trigger** instead.",
+        "height": 200,
+        "width": 340,
+        "color": 3
+      },
+      "id": "bbd99384-ec2e-41da-a199-75d6f2846d75",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [900, 180]
+    },
+    {
+      "parameters": {},
+      "id": "167fcdf3-8d9a-4a54-8efd-ee0e259232c8",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"orderId\": \"1001\",\n  \"amount\": 150.00,\n  \"description\": \"Software development services - order 1001\",\n  \"nfe\": {\n    \"companyId\": \"your-nfe-company-id\",\n    \"cityServiceCode\": \"your-city-service-code\",\n    \"federalServiceCode\": \"01.01\",\n    \"nbsCode\": \"1.1502.10.00\",\n    \"operationIndicator\": \"100301\",\n    \"classCode\": \"000001\"\n  },\n  \"customer\": {\n    \"name\": \"Maria Example\",\n    \"taxNumber\": \"123.456.789-09\",\n    \"email\": \"maria@example.com\",\n    \"postalCode\": \"80010-000\",\n    \"street\": \"Rua XV de Novembro\",\n    \"number\": \"100\",\n    \"district\": \"Centro\",\n    \"cityCode\": \"4106902\",\n    \"cityName\": \"Curitiba\",\n    \"state\": \"PR\"\n  }\n}\n",
+        "options": {}
+      },
+      "id": "ad94bd3c-4cdf-4314-ba51-1f626cf4210f",
+      "name": "Paid Order (sample)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "resource": "serviceInvoice",
+        "operation": "issue",
+        "companyId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.nfe.companyId }}"
+        },
+        "cityServiceCode": "={{ $json.nfe.cityServiceCode }}",
+        "description": "={{ $json.description }}",
+        "servicesAmount": "={{ $json.amount }}",
+        "borrowerInput": "fields",
+        "borrowerName": "={{ $json.customer.name }}",
+        "borrowerFederalTaxNumber": "={{ $json.customer.taxNumber }}",
+        "borrowerDetails": {
+          "email": "={{ $json.customer.email }}",
+          "postalCode": "={{ $json.customer.postalCode }}",
+          "street": "={{ $json.customer.street }}",
+          "number": "={{ $json.customer.number }}",
+          "district": "={{ $json.customer.district }}",
+          "cityCode": "={{ $json.customer.cityCode }}",
+          "cityName": "={{ $json.customer.cityName }}",
+          "state": "={{ $json.customer.state }}"
+        },
+        "additionalFields": {
+          "externalId": "={{ 'order-' + $json.orderId }}",
+          "federalServiceCode": "={{ $json.nfe.federalServiceCode }}",
+          "nbsCode": "={{ $json.nfe.nbsCode }}"
+        },
+        "taxReform": {
+          "operationIndicator": "={{ $json.nfe.operationIndicator }}",
+          "classCode": "={{ $json.nfe.classCode }}"
+        },
+        "waitForAuthorization": true,
+        "waitTimeout": 120
+      },
+      "id": "289ff67a-a2f8-4a70-9520-421fd068516a",
+      "name": "Issue NFS-e",
+      "type": "n8n-nodes-nfe.nfe",
+      "typeVersion": 2,
+      "position": [440, 0],
+      "credentials": {
+        "nfeApi": {
+          "name": "NFE.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "93b64d63-4c14-48c9-bad4-b935fd363b14",
+              "leftValue": "={{ $json.flowStatus }}",
+              "rightValue": "Issued",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d2ffd73b-39fb-4ae4-8346-1bf44e3b189a",
+      "name": "Authorized?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "resource": "serviceInvoice",
+        "operation": "downloadPdf",
+        "companyId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Paid Order (sample)').item.json.nfe.companyId }}"
+        },
+        "invoiceId": "={{ $json.id }}",
+        "binaryPropertyName": "data"
+      },
+      "id": "08d087ab-245f-4116-b42c-94ef5cd2b0f7",
+      "name": "Download PDF",
+      "type": "n8n-nodes-nfe.nfe",
+      "typeVersion": 2,
+      "position": [900, -100],
+      "credentials": {
+        "nfeApi": {
+          "name": "NFE.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Paid Order (sample)').item.json.customer.email }}",
+        "subject": "=Your service invoice (NFS-e) {{ $('Issue NFS-e').item.json.number }}",
+        "emailType": "text",
+        "message": "=Hello {{ $('Paid Order (sample)').item.json.customer.name }},\n\nThank you for your order {{ $('Paid Order (sample)').item.json.orderId }}. The service invoice (NFS-e) {{ $('Issue NFS-e').item.json.number }} is attached.",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "data"
+              }
+            ]
+          }
+        }
+      },
+      "id": "c13cece6-9924-4a8e-b727-6b1ac8a5ba87",
+      "name": "Email Invoice to Customer",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1120, -100],
+      "credentials": {
+        "gmailOAuth2": {
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking 'Execute workflow'": {
+      "main": [[{ "node": "Paid Order (sample)", "type": "main", "index": 0 }]]
+    },
+    "Paid Order (sample)": {
+      "main": [[{ "node": "Issue NFS-e", "type": "main", "index": 0 }]]
+    },
+    "Issue NFS-e": {
+      "main": [[{ "node": "Authorized?", "type": "main", "index": 0 }]]
+    },
+    "Authorized?": {
+      "main": [[{ "node": "Download PDF", "type": "main", "index": 0 }], []]
+    },
+    "Download PDF": {
+      "main": [[{ "node": "Email Invoice to Customer", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
