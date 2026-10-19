@@ -1,44 +1,106 @@
-name: Publish to npm
+# Publishes the package to npm when a version tag (for example 0.2.0) is pushed.
+#
+# Based on the workflow of the official n8n-nodes-starter. n8n requires community nodes to be
+# published from GitHub Actions with an npm provenance statement (since May 1 2026).
+#
+# One-time setup on npmjs.com (package settings > Trusted Publishers > GitHub Actions):
+#   repository owner: nfe, repository name: n8n-nodes-nfe, workflow: publish.yml, no environment.
+# With Trusted Publishing (OIDC) no npm token is stored in the repository. NPM_TOKEN stays
+# optional as a fallback, like in the starter.
+
+name: Publish
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '*.*.*'
+
+permissions:
+  contents: read
 
 jobs:
   publish:
+    name: Publish to npm
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
     permissions:
-      contents: read
+      # OIDC token for npm Trusted Publishing and the provenance attestation.
       id-token: write
+      contents: read
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          persist-credentials: false
 
-      - name: Check package.json version
-        id: package-version
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          # Node 24 ships npm 11, which supports Trusted Publishing.
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Check that the tag matches package.json
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "📦 Package version: $VERSION"
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "Tag $TAG does not match package.json version $VERSION"
+            exit 1
+          fi
 
       - name: Install dependencies
-        run: npm ci
+        # No install scripts of dependencies run in a job that can mint the OIDC token.
+        run: npm ci --ignore-scripts
 
       - name: Lint
         run: npm run lint
 
       - name: Build
-        run: npm run build 
+        run: npm run build
 
-      - name: Publish
-        run: npm publish --ignore-scripts --provenance --access public
+      - name: Unit tests
+        run: npm test
+
+      - name: Scan (same checks as the n8n verification)
+        run: npm run scan
+
+      - name: Release
+        # In GitHub Actions `n8n-node release` runs lint and build again and then
+        # `npm publish` with NPM_CONFIG_PROVENANCE=true.
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"; fi
+          npm run release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  verify:
+    name: Official scanner on the published version
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+
+      - name: Install the pinned scanner
+        run: npm ci --ignore-scripts --no-audit --no-fund --prefix tools/scanner
+
+      - name: Run @n8n/scan-community-package
+        # The scanner CLI exits with 0 even when the package fails, so the script calls the
+        # scanner's analyzePackageByName and exits with 1 on failure. It retries while the
+        # registry catches up with the new version and fails at once on lint findings.
+        env:
+          TAG: ${{ github.ref_name }}
+        run: node scripts/verify-published.mjs "n8n-nodes-nfe@$TAG"
