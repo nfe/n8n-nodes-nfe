@@ -4,7 +4,11 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"target": "es2019",
-		"lib": ["es2019", "es2020", "es2022.error"],
+		"lib": [
+			"es2019",
+			"es2020",
+			"es2022.error"
+		],
 		"removeComments": true,
 		"useUnknownInCatchVariables": false,
 		"forceConsistentCasingInFileNames": true,
@@ -21,6 +25,10 @@
 		"skipLibCheck": true,
 		"outDir": "./dist/"
 	},
-	"include": ["credentials/**/*.ts", "nodes/**/*.ts", "nodes/**/*.json", "package.json"],
-	"exclude": ["**/node_modules/**", "**/dist/**", "n8n-docs/**", "n8n-nodes-github-example/**", "nfe-client-nodejs/**"]
+	"include": [
+		"credentials/**/*",
+		"nodes/**/*",
+		"nodes/**/*.json",
+		"package.json"
+	]
 }

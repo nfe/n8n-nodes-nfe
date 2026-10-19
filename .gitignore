@@ -1,14 +1,6 @@
-
 .env
-.agents
-openspec
-node_modules
 node_modules/
-dist
-build
-nfe-client-nodejs
-n8n-nodes-github-example
-n8n-docs
-.github/agents/n8n-nfe-generator.agent.md
-docker-compose.yml
+dist/
+coverage/
+*.tgz
 .vscode/mcp.json

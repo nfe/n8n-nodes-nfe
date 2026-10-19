@@ -1,0 +1,244 @@
+{
+	"eventTypes": [
+		{
+			"id": "consumer_invoice.cancelled_error",
+			"description": "Triggered when consumer invoice (NFCe) processing has been occurred an error to Cancel.",
+			"status": "Active"
+		},
+		{
+			"id": "consumer_invoice.cancelled_failed",
+			"description": "Triggered when consumer invoice (NFCe) processing has been failed to Cancel.",
+			"status": "Active"
+		},
+		{
+			"id": "consumer_invoice.cancelled_successfully",
+			"description": "Triggered when consumer invoice (NFCe) processing has been Cancelled successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "consumer_invoice.issued_error",
+			"description": "Triggered when consumer invoice (NFCe) processing has been occurred an error to Issue.",
+			"status": "Active"
+		},
+		{
+			"id": "consumer_invoice.issued_failed",
+			"description": "Triggered when consumer invoice (NFCe) processing has been failed to Issue.",
+			"status": "Active"
+		},
+		{
+			"id": "consumer_invoice.issued_successfully",
+			"description": "Triggered when consumer invoice (NFCe) processing has been Issued successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "legal_entity_taxpayer:updated_sucessfully",
+			"description": "Triggered when a legal entity taxpayer has been updated successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.cancelled_error",
+			"description": "Triggered when product invoice (NFe) processing has been occurred an error to Cancel.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.cancelled_failed",
+			"description": "Triggered when product invoice (NFe) processing has been failed to Cancel.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.cancelled_successfully",
+			"description": "Triggered when product invoice (NFe) processing has been Cancelled successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.issued_error",
+			"description": "Triggered when product invoice (NFe) processing has been occurred an error to Issue.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.issued_failed",
+			"description": "Triggered when product invoice (NFe) processing has been failed to Issue.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.issued_successfully",
+			"description": "Triggered when product invoice (NFe) processing has been Issued successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice_inbound.event_raised_successfully",
+			"description": "Triggered when an event has been successfully Raised on a product invoice (NFe) and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice_inbound.input_event_raised_successfully",
+			"description": "Triggered when an input event has been successfully Raised on a product invoice (NFe) and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice_inbound.issued_successfully",
+			"description": "Triggered when a product invoice (NFe) has been Issued successfully and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice_inbound_summary.event_raised_successfully",
+			"description": "Triggered when an event has been successfully Raised on a product invoice (NFe) and retrieved the summary from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice_inbound_summary.issued_successfully",
+			"description": "Triggered when a product invoice (NFe) has been Issued successfully and retrieved the summary from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.cancelled",
+			"description": "Triggered when service invoice (NFSe) processing has been Cancelled, either successfully or failed.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.cancelled_error",
+			"description": "Triggered when service invoice (NFSe) processing has been occurred an error to Cancel.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.cancelled_failed",
+			"description": "Triggered when service invoice (NFSe) processing has been failed to Cancel.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.cancelled_successfully",
+			"description": "Triggered when service invoice (NFSe) processing has been Cancelled successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.issued",
+			"description": "Triggered when service invoice (NFSe) processing has been Issued, either successfully or failed.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.issued_error",
+			"description": "Triggered when service invoice (NFSe) processing has been occurred an error to Issue.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.issued_failed",
+			"description": "Triggered when service invoice (NFSe) processing has been failed to Issue.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.issued_successfully",
+			"description": "Triggered when service invoice (NFSe) processing has been Issued successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "transportation_invoice_inbound.event_raised_successfully",
+			"description": "Triggered when an event has been successfully Raised on a transportation invoice (CTe) and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "transportation_invoice_inbound.issued_successfully",
+			"description": "Triggered when a transportation invoice (CTe) has been Issued successfully and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice.pulled",
+			"description": "Triggered when service invoice (NFSe) was pulled automatically.",
+			"status": "Active"
+		},
+		{
+			"id": "product_tax.created_successfully",
+			"description": "Triggered when a product is successfully saved and all tax rules applied.",
+			"status": "Active"
+		},
+		{
+			"id": "product_tax.custom_rules_requested",
+			"description": "Triggered when a product requires custom tax rules, which will be assembled and applied as described in specific service times.",
+			"status": "Active"
+		},
+		{
+			"id": "product_tax.creation_failed",
+			"description": "Triggered when a product tax could not be saved. More details described in the event",
+			"status": "Active"
+		},
+		{
+			"id": "tax_payment_form.creation_failed",
+			"description": "Triggered when a tax payment has failed during creation.",
+			"status": "Active"
+		},
+		{
+			"id": "tax_payment_form.created_successfully",
+			"description": "Triggered when a tax payment has been successfully created.",
+			"status": "Active"
+		},
+		{
+			"id": "tax_payment_form.creation_not_needed",
+			"description": "Triggered when a tax payment will not be created because it is not needed considering the UF rules.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.cce_failed",
+			"description": "Triggered when invoice event (NFe) processing has been failed to CCe.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.cce_error",
+			"description": "Triggered when invoice event (NFe) processing has been occurred an error to CCe.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.cce_successfully",
+			"description": "Triggered when invoice event cce (NFe) processing has been sent successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice_inbound.issued_successfully",
+			"description": "Triggered when a service invoice (NFS-e) has been Issued successfully and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice_inbound.event_raised_successfully",
+			"description": "Triggered when an event has been successfully Raised on a service invoice (NFS-e) and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.dfe_event_successfully",
+			"description": "Triggered when DFe event (NT 2025.002-RTC) processing has been registered successfully on SVRS.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.dfe_event_failed",
+			"description": "Triggered when DFe event (NT 2025.002-RTC) processing has exhausted retry attempts and entered terminal failed state.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.dfe_event_error",
+			"description": "Triggered when DFe event (NT 2025.002-RTC) processing has failed with a non-retryable error.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.disabled_successfully",
+			"description": "Triggered when product invoice (NFe) processing has been Disabled successfully.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.disabled_error",
+			"description": "Triggered when product invoice (NFe) processing has been Disabled error.",
+			"status": "Active"
+		},
+		{
+			"id": "product_invoice.disabled_failed",
+			"description": "Triggered when product invoice (NFe) processing has been Disabled failed.",
+			"status": "Active"
+		},
+		{
+			"id": "service_invoice_inbound.outbound_successfully",
+			"description": "Triggered when a service invoice outbound (NFS-e) has been Issued successfully and retrieved from inbound services.",
+			"status": "Active"
+		},
+		{
+			"id": "*",
+			"description": "Listen in on all events.",
+			"status": "Active"
+		}
+	]
+}

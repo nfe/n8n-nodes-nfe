@@ -1,56 +1,80 @@
 {
-  "name": "n8n-nodes-nfe",
-  "version": "0.1.0",
-  "description": "n8n community nodes for NFe.io - Brazilian electronic invoice API",
-  "license": "MIT",
-  "homepage": "https://github.com/nfe/n8n-nodes-nfe",
-  "keywords": [
-    "n8n-community-node-package",
-    "n8n",
-    "n8n-node",
-    "n8n-nodes",
-    "n8n-community-node",
-    "nfe",
-    "nfe.io",
-    "nfeio",
-    "nfse",
-    "brazil",
-    "brazilian-invoice",
-    "electronic-invoice",
-    "service-invoice",
-    "e-invoicing",
-    "tax",
-    "fiscal-document",
-    "api-integration",
-    "n8n-automation"
-  ],
-  "author": { "name": "Andre Kutianski", "email": "andre@nfe.io" },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nfe/n8n-nodes-nfe.git"
-  },
-  "scripts": {
-    "build": "n8n-node build",
-    "build:watch": "tsc --watch",
-    "dev": "n8n-node dev",
-    "lint": "n8n-node lint",
-    "lint:fix": "n8n-node lint --fix",
-    "release": "n8n-node release",
-    "prepublishOnly": "n8n-node prerelease"
-  },
-  "files": ["dist"],
-  "n8n": {
-    "n8nNodesApiVersion": 1,
-    "strict": true,
-    "credentials": ["dist/credentials/NfeApi.credentials.js"],
-    "nodes": ["dist/nodes/Nfe/Nfe.node.js"]
-  },
-  "devDependencies": {
-    "@n8n/node-cli": "*",
-    "eslint": "9.32.0",
-    "prettier": "3.6.2",
-    "release-it": "^19.0.4",
-    "typescript": "5.9.2"
-  },
-  "peerDependencies": { "n8n-workflow": "*" }
+	"name": "n8n-nodes-nfe",
+	"version": "0.2.0",
+	"description": "n8n nodes for NFE.io: issue and manage Brazilian service invoices (NFS-e) with the tax reform fields, start workflows from NFE.io webhook events and look up CNPJ and postal codes",
+	"license": "MIT",
+	"homepage": "https://github.com/nfe/n8n-nodes-nfe",
+	"keywords": [
+		"n8n-community-node-package",
+		"n8n",
+		"n8n-node",
+		"n8n-nodes",
+		"n8n-community-node",
+		"nfe",
+		"nfe.io",
+		"nfeio",
+		"nfse",
+		"brazil",
+		"brazilian-invoice",
+		"electronic-invoice",
+		"service-invoice",
+		"e-invoicing",
+		"tax",
+		"fiscal-document",
+		"api-integration",
+		"n8n-automation",
+		"nfs-e",
+		"webhook",
+		"cnpj",
+		"cep"
+	],
+	"author": {
+		"name": "Andre Kutianski",
+		"email": "andre@nfe.io"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nfe/n8n-nodes-nfe.git"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"test": "vitest run --coverage",
+		"test:integration": "vitest run --config vitest.integration.config.mts",
+		"scan": "node scripts/scan.mjs",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist",
+		"!dist/package.json",
+		"!dist/tsconfig.tsbuildinfo",
+		"CHANGELOG.md"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/NfeApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Nfe/Nfe.node.js",
+			"dist/nodes/NfeTrigger/NfeTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "^0.52.5",
+		"@vitest/coverage-v8": "5.0.5",
+		"eslint": "9.39.4",
+		"prettier": "3.8.3",
+		"release-it": "20.2.0",
+		"typescript": "5.9.3",
+		"vitest": "5.0.5"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
 }
