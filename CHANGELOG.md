@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - Unreleased
+## [0.2.1] - 2026-11-06
+
+Maintenance release. The published package and the behavior of the nodes do not change.
+
+### Changed
+
+- Updated the development dependencies and the pinned copy of the n8n community package scanner to resolve security alerts. These tools are used only to build, test and check the package; the published package still has no runtime dependencies.
+- The check that runs after publishing waits longer for the npm registry to serve the new version (10 attempts, 30 seconds apart).
+
+## [0.2.0] - 2026-11-06
 
 A rewrite of the NFE.io node with the NFS-e API V3 and the tax reform fields, plus a trigger node and lookups. See [Migrating from 0.1](README.md#migrating-from-01).
 
@@ -69,5 +78,6 @@ A rewrite of the NFE.io node with the NFS-e API V3 and the tax reform fields, pl
 	- **Download XML** of a service invoice.
 	- **Send Email** with the service invoice to the borrower.
 
+[0.2.1]: https://github.com/nfe/n8n-nodes-nfe/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/nfe/n8n-nodes-nfe/compare/v0.1.0...0.2.0
 [0.1.0]: https://github.com/nfe/n8n-nodes-nfe/tree/v0.1.0

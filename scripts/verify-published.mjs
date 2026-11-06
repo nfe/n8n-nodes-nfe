@@ -22,7 +22,8 @@ import path from 'node:path';
 import { setTimeout as wait } from 'node:timers/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const ATTEMPTS = 5;
+// The registry has taken 3 to 4 minutes to serve a new version: wait up to 4.5 minutes.
+const ATTEMPTS = 10;
 const WAIT_SECONDS = 30;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -32,8 +33,8 @@ const scannerModule = path.join(
 	'node_modules',
 	'@n8n',
 	'scan-community-package',
-	'scanner',
-	'scanner.mjs',
+	'dist',
+	'scanner.js',
 );
 
 function usage() {
