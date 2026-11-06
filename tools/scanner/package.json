@@ -1,0 +1,9 @@
+{
+	"name": "n8n-nodes-nfe-scanner",
+	"private": true,
+	"description": "Pinned copy of the official n8n community package scanner, kept apart from the build toolchain",
+	"license": "MIT",
+	"dependencies": {
+		"@n8n/scan-community-package": "0.39.0"
+	}
+}
