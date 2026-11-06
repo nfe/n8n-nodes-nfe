@@ -32,8 +32,8 @@ const scannerModule = path.join(
 	'node_modules',
 	'@n8n',
 	'scan-community-package',
-	'scanner',
-	'scanner.mjs',
+	'dist',
+	'scanner.js',
 );
 
 function usage() {
