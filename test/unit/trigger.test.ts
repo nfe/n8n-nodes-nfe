@@ -301,7 +301,7 @@ describe('webhook lifecycle', () => {
 		await hooks.create.call(hookContext(api, params, data));
 		await hooks.checkExists.call(hookContext(api, params, data));
 		await hooks.delete.call(hookContext(api, params, data));
-		expect(api.callsTo('GET', new RegExp(`${WEBHOOKS_BASE}$`))).toHaveLength(1);
+		expect(api.callsToUrl('GET', WEBHOOKS_BASE)).toHaveLength(1);
 		expect(api.callsTo('DELETE', /./).map((call) => call.options.url)).toEqual([
 			`${WEBHOOKS_BASE}/${HOOK_ID}`,
 		]);
@@ -475,7 +475,7 @@ describe('previous webhook secret', () => {
 
 	function sentSecrets(api: FakeApi): string[] {
 		return api
-			.callsTo('POST', new RegExp(`${WEBHOOKS_BASE}$`))
+			.callsToUrl('POST', WEBHOOKS_BASE)
 			.map((call) => ((call.options.body as IDataObject).webHook as IDataObject).secret as string);
 	}
 

@@ -203,6 +203,29 @@ describe('output', () => {
 		expect(shapeOutput({ a: 1 }, 'raw', '', simplifyInvoice)).toEqual({ a: 1 });
 		expect(shapeOutput({ a: 1 }, 'selected', 'a', simplifyInvoice)).toEqual({ a: 1 });
 	});
+
+	it('never pollutes Object.prototype through selected field paths', () => {
+		const unsafe = [
+			'__proto__',
+			'__proto__.polluted',
+			'a.__proto__.polluted',
+			'constructor.prototype.polluted',
+			'a.constructor.prototype.polluted',
+			'prototype.polluted',
+			'a.prototype',
+		];
+		for (const path of unsafe) {
+			const result = selectFields({ a: { b: 1 } }, path);
+			expect(result).toEqual({});
+			expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+		}
+		expect(shapeOutput({ a: 1 }, 'selected', unsafe.join(','), simplifyInvoice)).toEqual({});
+		expect(Object.prototype).not.toHaveProperty('polluted');
+		expect(({} as Record<string, unknown>).polluted).toBeUndefined();
+		// Inherited members are not reused as containers for nested writes.
+		expect(selectFields({}, 'toString.x')).toEqual({ toString: { x: null } });
+		expect(Object.prototype.toString).toBeTypeOf('function');
+	});
 });
 
 describe('waitForFlowStatus', () => {

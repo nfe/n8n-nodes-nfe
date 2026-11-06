@@ -19,14 +19,17 @@ function setPath(target: IDataObject, path: string, value: unknown) {
 	// Field paths may come from an AI agent: never write to object prototypes.
 	if (keys.some((key) => UNSAFE_KEYS.has(key) || key === '')) return;
 	let current = target;
-	keys.forEach((key, index) => {
+	for (let index = 0; index < keys.length; index++) {
+		const key = keys[index];
+		if (key === '__proto__' || key === 'constructor' || key === 'prototype') return;
 		if (index === keys.length - 1) {
 			current[key] = value as IDataObject[string];
 			return;
 		}
-		if (typeof current[key] !== 'object' || current[key] === null) current[key] = {};
+		const next = Object.prototype.hasOwnProperty.call(current, key) ? current[key] : undefined;
+		if (typeof next !== 'object' || next === null) current[key] = {};
 		current = current[key] as IDataObject;
-	});
+	}
 }
 
 function valueOrNull(value: unknown) {

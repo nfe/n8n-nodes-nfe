@@ -18,11 +18,17 @@ export interface FakeResponse {
 	networkError?: { code: string; message?: string };
 }
 
-type Matcher = string | RegExp | ((options: IHttpRequestOptions) => boolean);
+type Predicate = (options: IHttpRequestOptions) => boolean;
+
+/** A string matches the whole URL; a RegExp or a predicate is tested as is. */
+type Matcher = string | RegExp | Predicate;
 
 interface Route {
 	method: string;
-	matcher: Matcher;
+	/** Exact URL. Strings are never turned into regular expressions. */
+	url?: string;
+	pattern?: RegExp;
+	predicate?: Predicate;
 	responses: Array<FakeResponse | ((options: IHttpRequestOptions) => FakeResponse)>;
 	calls: number;
 }
@@ -43,16 +49,19 @@ export class FakeApi {
 	calls: RecordedCall[] = [];
 
 	on(method: string, matcher: Matcher, ...responses: Route['responses']): this {
-		this.routes.push({ method, matcher, responses, calls: 0 });
+		const route: Route = { method, responses, calls: 0 };
+		if (typeof matcher === 'string') route.url = matcher;
+		else if (matcher instanceof RegExp) route.pattern = matcher;
+		else route.predicate = matcher;
+		this.routes.push(route);
 		return this;
 	}
 
 	private match(route: Route, options: IHttpRequestOptions): boolean {
 		if (route.method !== (options.method ?? 'GET')) return false;
-		const url = options.url;
-		if (typeof route.matcher === 'string') return url === route.matcher;
-		if (route.matcher instanceof RegExp) return route.matcher.test(url);
-		return route.matcher(options);
+		if (route.url !== undefined) return options.url === route.url;
+		if (route.pattern !== undefined) return route.pattern.test(options.url);
+		return route.predicate !== undefined && route.predicate(options);
 	}
 
 	async handle(options: IHttpRequestOptions, authenticated: boolean, credential?: string) {
@@ -81,6 +90,13 @@ export class FakeApi {
 	callsTo(method: string, pattern: RegExp): RecordedCall[] {
 		return this.calls.filter(
 			(call) => (call.options.method ?? 'GET') === method && pattern.test(call.options.url),
+		);
+	}
+
+	/** Calls to exactly this URL. */
+	callsToUrl(method: string, url: string): RecordedCall[] {
+		return this.calls.filter(
+			(call) => (call.options.method ?? 'GET') === method && call.options.url === url,
 		);
 	}
 }

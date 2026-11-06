@@ -1,4 +1,4 @@
-import type { IDataObject } from 'n8n-workflow';
+import type { IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { sleep } from 'n8n-workflow';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -8,7 +8,7 @@ import { COMPANY_ID, ERROR_BODIES, invoice, INVOICE_ID } from '../fixtures/api';
 import { executeContext, FakeApi } from '../helpers/context';
 
 const BASE = `https://api.nfe.io/v3/companies/${COMPANY_ID}/serviceinvoices`;
-const EXTERNAL = new RegExp(`^${BASE}/external/`);
+const EXTERNAL = (options: IHttpRequestOptions) => options.url.startsWith(`${BASE}/external/`);
 
 const required = {
 	resource: 'serviceInvoice',
