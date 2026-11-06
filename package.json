@@ -52,6 +52,7 @@
 		"dist",
 		"!dist/package.json",
 		"!dist/tsconfig.tsbuildinfo",
+		"!dist/tools",
 		"CHANGELOG.md"
 	],
 	"n8n": {
